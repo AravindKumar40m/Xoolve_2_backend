@@ -1,7 +1,9 @@
 import { User } from "../models/userModel.js";
 import bcrypt from "bcryptjs";
+import { errorHandler } from "../utills/error.js";
+import jwt from "jsonwebtoken";
 
-export const register = async (req, res) => {
+export const register = async (req, res, next) => {
   try {
     const { firstName, lastName, email, phoneNumber, password, role } =
       req.body;
@@ -13,16 +15,13 @@ export const register = async (req, res) => {
       !password ||
       !role
     ) {
-      return res.status(400).json({
-        message: "Something is missing",
-        success: false,
-      });
+      return next(errorHandler(400, "Something is missing"));
     }
 
     const existUser = await User.findOne({ email });
 
     if (existUser) {
-      return res.status(401).json({ message: "User already exist" });
+      return next(errorHandler(400, "User already exist"));
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -37,10 +36,40 @@ export const register = async (req, res) => {
       success: true,
     });
   } catch (error) {
-    return res.status(500).json({
-      message: "Internal server error. Please try again later.",
-      success: false,
-    });
+    next(error);
+  }
+};
+
+export const login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return next(errorHandler(400, "All fields is required"));
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return next(errorHandler(404, "User not found"));
+    }
+
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    if (!isPasswordMatch) {
+      return next(errorHandler(401, "Wrong credentials!"));
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+
+    const { password: pass, ...rest } = user._doc;
+
+    return res
+      .cookie("token", token, { httpOnly: true })
+      .status(200)
+      .json(rest);
+  } catch (error) {
+    console.log(error);
+    next(error);
   }
 };
 
