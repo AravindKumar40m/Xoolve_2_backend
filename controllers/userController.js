@@ -73,6 +73,15 @@ export const login = async (req, res, next) => {
   }
 };
 
+export const logout = async (req, res, next) => {
+  try {
+    res.clearCookie("token");
+    res.status(200).json("User has been logged out!");
+  } catch (error) {
+    next(error);
+  }
+};
+
 //  4 user table
 //  profile table - userid and other stuff
 //  mentor table - userid , array of studentsid , courseid
