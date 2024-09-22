@@ -24,3 +24,5 @@ const RequestSchema = new mongoose.Schema(
 );
 
 export const Request = mongoose.model("Request", RequestSchema);
+
+/// add courseids

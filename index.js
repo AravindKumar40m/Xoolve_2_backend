@@ -2,6 +2,9 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRouter from "./routes/userRoutes.js";
+import StartUpMentorRouter from "./routes/StartUpMentorRoutes.js";
+import incubatorRouter from "./routes/IncubatorRoutes.js";
+import ideaRouter from "./routes/IdeationRoutes.js";
 
 dotenv.config();
 
@@ -19,6 +22,9 @@ const app = express();
 app.use(express.json());
 
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/startupmentor", StartUpMentorRouter);
+app.use("/api/v1/incubator", incubatorRouter);
+app.use("/api/v1/idea", ideaRouter);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;

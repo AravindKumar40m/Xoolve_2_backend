@@ -4,14 +4,14 @@ const MenteeSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Idea",
       required: true,
     },
     mentorId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Mentor",
     },
-    courseId: [
+    courseIds: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Course",

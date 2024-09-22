@@ -7,19 +7,19 @@ const mentorSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    expertiesArea: [
+    expertiseArea: [
       {
         type: String,
         required: true,
       },
     ],
-    studentIds: [
+    menteeIds: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Mentee",
       },
     ],
-    courseId: [
+    courseIds: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Course",

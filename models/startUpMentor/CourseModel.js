@@ -19,7 +19,7 @@ const CourseSchema = new mongoose.Schema(
       ref: "Mentor",
       required: true,
     },
-    menteeId: [
+    menteeIds: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Mentee",
@@ -27,10 +27,11 @@ const CourseSchema = new mongoose.Schema(
       },
     ],
     noOfSessionFinished: {
-      type: String,
+      type: Number,
+      default: 0,
     },
     image: { type: String },
-    rating: { type: String },
+    rating: { type: Number },
   },
   {
     timestamps: true,
